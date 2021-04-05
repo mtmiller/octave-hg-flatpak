@@ -443,6 +443,7 @@ modules:
 
   - name: octave
     config-opts:
+      - --disable-docs
       - --disable-silent-rules
       - --with-blas=openblas
       - --with-java-homedir=/app/jre
@@ -451,6 +452,8 @@ modules:
     # these are the build flags used in the Freedesktop SDK, without "target_flags_glibcxx_assertions":
     # https://gitlab.com/freedesktop-sdk/freedesktop-sdk/-/blob/master/include/flags.yml
     build-options:
+      build-args:
+        - --share=network
       cflags: -O2 -g -pipe -Wp,-D_FORTIFY_SOURCE=2 -fexceptions -fstack-protector-strong
         -grecord-gcc-switches
       cflags-override: true
@@ -463,10 +466,6 @@ modules:
     cleanup:
       - /share/icons/hicolor/1024x1024 # workaround for https://savannah.gnu.org/bugs/?55836
     sources:
-      - type: archive
-        url: https://ftpmirror.gnu.org/octave/octave-6.2.0.tar.xz
-        sha256: 7b721324cccb3eaeb4efb455508201ac8ccbd200f77106f52342f9ab7f022d1a
-        x-checker-data:
-          type: anitya
-          project-id: 2528
-          url-template: https://ftpmirror.gnu.org/octave/octave-$version.tar.xz
+      - type: shell
+        commands:
+          - hg clone -u @ https://hg.savannah.gnu.org/hgweb/octave .
