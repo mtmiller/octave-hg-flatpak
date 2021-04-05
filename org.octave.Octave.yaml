@@ -23,10 +23,13 @@ finish-args:
 cleanup:
   - /bin/*lpr*.sh
   - /bin/GraphicsMagick*config
+  - /bin/extresso
   - /bin/fltk-config
+  - /bin/genresscript
   - /bin/gif2h5
   - /bin/glpsol
   - /bin/h5*
+  - /bin/icotool
   - /bin/isympy
   - /bin/qconvex
   - /bin/qdelaunay
@@ -34,6 +37,7 @@ cleanup:
   - /bin/qhull
   - /bin/qvoronoi
   - /bin/rbox
+  - /bin/wrestool
   - /com
   - /examples
   - /include/QSci
@@ -372,6 +376,14 @@ modules:
           type: anitya
           project-id: 4958
           url-template: https://ftpmirror.gnu.org/texinfo/texinfo-$version.tar.xz
+
+  - name: icoutils
+    config-opts:
+      - --disable-nls
+    sources:
+      - type: archive
+        url: https://download.savannah.gnu.org/releases/icoutils/icoutils-0.32.3.tar.bz2
+        sha256: 17abe02d043a253b68b47e3af69c9fc755b895db68fdc8811786125df564c6e0
 
   - name: units # dependency of the miscellaneous package
     config-opts:
