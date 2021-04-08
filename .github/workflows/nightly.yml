@@ -1,0 +1,28 @@
+name: Nightly build
+on:
+  schedule:
+    - cron: '0 2 * * *'
+
+jobs:
+  build:
+    name: Build
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+        with:
+          submodules: true
+
+      - name: Install dependencies
+        run: sudo apt install flatpak flatpak-builder
+
+      - name: Configure flathub remote
+        run: flatpak remote-add --user flathub https://flathub.org/repo/flathub.flatpakrepo
+
+      - name: Build
+        run: flatpak-builder --user --install-deps-from=flathub --assumeyes octave org.octave.Octave.yaml
+
+      - name: Create a repository
+        run: |
+          flatpak build-export --update-appstream repo octave nightly
+          flatpak build-update-repo --default-branch=nightly repo
