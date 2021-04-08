@@ -16,8 +16,11 @@ jobs:
       - name: Install dependencies
         run: sudo apt install flatpak flatpak-builder
 
+      - name: Configure flathub remote
+        run: flatpak remote-add --user flathub https://flathub.org/repo/flathub.flatpakrepo
+
       - name: Build
-        run: flatpak-builder octave org.octave.Octave.yaml
+        run: flatpak-builder --user --install-deps-from=flathub --assumeyes octave org.octave.Octave.yaml
 
       - name: Create a repository
         run: |
