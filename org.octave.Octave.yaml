@@ -23,10 +23,13 @@ finish-args:
 cleanup:
   - /bin/*lpr*.sh
   - /bin/GraphicsMagick*config
+  - /bin/extresso
   - /bin/fltk-config
+  - /bin/genresscript
   - /bin/gif2h5
   - /bin/glpsol
   - /bin/h5*
+  - /bin/icotool
   - /bin/isympy
   - /bin/qconvex
   - /bin/qdelaunay
@@ -34,6 +37,7 @@ cleanup:
   - /bin/qhull
   - /bin/qvoronoi
   - /bin/rbox
+  - /bin/wrestool
   - /com
   - /examples
   - /include/QSci
@@ -373,6 +377,14 @@ modules:
           project-id: 4958
           url-template: https://ftpmirror.gnu.org/texinfo/texinfo-$version.tar.xz
 
+  - name: icoutils
+    config-opts:
+      - --disable-nls
+    sources:
+      - type: archive
+        url: https://download.savannah.gnu.org/releases/icoutils/icoutils-0.32.3.tar.bz2
+        sha256: 17abe02d043a253b68b47e3af69c9fc755b895db68fdc8811786125df564c6e0
+
   - name: units # dependency of the miscellaneous package
     config-opts:
       - PYTHON=/usr/bin/python3
@@ -431,6 +443,7 @@ modules:
 
   - name: octave
     config-opts:
+      - --disable-docs
       - --disable-silent-rules
       - --with-blas=openblas
       - --with-java-homedir=/app/jre
@@ -439,6 +452,8 @@ modules:
     # these are the build flags used in the Freedesktop SDK, without "target_flags_glibcxx_assertions":
     # https://gitlab.com/freedesktop-sdk/freedesktop-sdk/-/blob/master/include/flags.yml
     build-options:
+      build-args:
+        - --share=network
       cflags: -O2 -g -pipe -Wp,-D_FORTIFY_SOURCE=2 -fexceptions -fstack-protector-strong
         -grecord-gcc-switches
       cflags-override: true
@@ -451,10 +466,12 @@ modules:
     cleanup:
       - /share/icons/hicolor/1024x1024 # workaround for https://savannah.gnu.org/bugs/?55836
     sources:
-      - type: archive
-        url: https://ftpmirror.gnu.org/octave/octave-6.2.0.tar.xz
-        sha256: 7b721324cccb3eaeb4efb455508201ac8ccbd200f77106f52342f9ab7f022d1a
-        x-checker-data:
-          type: anitya
-          project-id: 2528
-          url-template: https://ftpmirror.gnu.org/octave/octave-$version.tar.xz
+      - type: shell
+        commands:
+          - hg clone -u @ https://hg.savannah.gnu.org/hgweb/octave .
+          - hg id -i | cut -c1-8 > commit.txt
+          - date -u +%Y-%m-%d > date.txt
+          - sed -n '/^AC_INIT/{s/^[^,]*, *\[//;s/\],.*//;p}' configure.ac > ac-version.txt
+          - echo "$(cat ac-version.txt)+hg$(cat commit.txt)" > version.txt
+          - echo "<release version=\"$(cat version.txt)\" type=\"development\" date=\"$(cat date.txt)\" />" > release.xml
+          - sed -i "/<releases>/a\    $(cat release.xml)" etc/icons/org.octave.Octave.appdata.xml
