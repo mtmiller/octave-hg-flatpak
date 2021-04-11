@@ -13,6 +13,13 @@ jobs:
         with:
           submodules: true
 
+      - name: Import GPG key
+        id: gpg
+        uses: crazy-max/ghaction-import-gpg@v3
+        with:
+          gpg-private-key: ${{ secrets.GPG_PRIVATE_KEY }}
+          passphrase: ${{ secrets.PASSPHRASE }}
+
       - name: Install dependencies
         run: sudo apt install flatpak flatpak-builder
 
@@ -24,5 +31,5 @@ jobs:
 
       - name: Create a repository
         run: |
-          flatpak build-export --update-appstream repo octave nightly
-          flatpak build-update-repo --default-branch=nightly repo
+          flatpak build-export --gpg-sign=${{ steps.gpg.outputs.keyid }} repo octave nightly
+          flatpak build-update-repo --gpg-sign=${{ steps.gpg.outputs.keyid }} --default-branch=nightly repo
