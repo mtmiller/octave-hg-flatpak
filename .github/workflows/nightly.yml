@@ -48,10 +48,11 @@ jobs:
       - name: Copy previous repository from S3 bucket to working directory
         run: aws s3 sync s3://${{ secrets.AWS_S3_BUCKET }}/repo repo
 
-      - name: Create a repository
-        run: |
-          flatpak build-export --gpg-sign=${{ steps.gpg.outputs.keyid }} repo octave nightly
-          flatpak build-update-repo --gpg-sign=${{ steps.gpg.outputs.keyid }} --default-branch=nightly repo
+      - name: Export Octave build to repository
+        run: flatpak build-export --gpg-sign=${{ steps.gpg.outputs.keyid }} repo octave nightly
+
+      - name: Update repository metadata
+        run: flatpak build-update-repo --gpg-sign=${{ steps.gpg.outputs.keyid }} --default-branch=nightly repo
 
       - name: Publish repository to S3 bucket
         run: aws s3 sync repo s3://${{ secrets.AWS_S3_BUCKET }}/repo --acl public-read --delete
