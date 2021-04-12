@@ -20,6 +20,15 @@ jobs:
           gpg-private-key: ${{ secrets.GPG_PRIVATE_KEY }}
           passphrase: ${{ secrets.PASSPHRASE }}
 
+      - name: Cache flatpak build state directory
+        uses: actions/cache@v2
+        with:
+          path: |
+            .flatpak-builder
+            !.flatpak-builder/build
+            !.flatpak-builder/cache/refs/heads/*/build-octave
+            !.flatpak-builder/rofiles
+
       - name: Install dependencies
         run: sudo apt install flatpak flatpak-builder
 
@@ -27,7 +36,7 @@ jobs:
         run: flatpak remote-add --user flathub https://flathub.org/repo/flathub.flatpakrepo
 
       - name: Build
-        run: flatpak-builder --user --install-deps-from=flathub --assumeyes octave org.octave.Octave.yaml
+        run: flatpak-builder --user --install-deps-from=flathub --assumeyes --ccache --default-branch=nightly octave org.octave.Octave.yaml
 
       - name: Create a repository
         run: |
