@@ -20,6 +20,15 @@ jobs:
           gpg-private-key: ${{ secrets.GPG_PRIVATE_KEY }}
           passphrase: ${{ secrets.PASSPHRASE }}
 
+      - name: Cache flatpak build state directory
+        uses: actions/cache@v2
+        with:
+          path: |
+            .flatpak-builder
+            !.flatpak-builder/build
+            !.flatpak-builder/cache/refs/heads/*/build-octave
+            !.flatpak-builder/rofiles
+
       - name: Install dependencies
         run: sudo apt install flatpak flatpak-builder
 
