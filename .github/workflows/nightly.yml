@@ -36,7 +36,7 @@ jobs:
         run: flatpak remote-add --user flathub https://flathub.org/repo/flathub.flatpakrepo
 
       - name: Build
-        run: flatpak-builder --user --install-deps-from=flathub --assumeyes octave org.octave.Octave.yaml
+        run: flatpak-builder --user --install-deps-from=flathub --assumeyes --ccache octave org.octave.Octave.yaml
 
       - name: Create a repository
         run: |
