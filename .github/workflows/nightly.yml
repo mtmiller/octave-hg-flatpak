@@ -29,12 +29,19 @@ jobs:
 
       - name: Cache flatpak build state directory
         uses: actions/cache@v2
+        env:
+          cache-name: cache-flatpak-state
         with:
           path: |
             .flatpak-builder
             !.flatpak-builder/build
             !.flatpak-builder/cache/refs/heads/*/build-octave
             !.flatpak-builder/rofiles
+          key: ${{ runner.os }}-build-${{ env.cache-name }}-${{ hashFiles('org.octave.Octave.yaml') }}
+          restore-keys: |
+            ${{ runner.os }}-build-${{ env.cache-name }}-
+            ${{ runner.os }}-build-
+            ${{ runner.os }}-
 
       - name: Install dependencies
         run: sudo apt install flatpak flatpak-builder
