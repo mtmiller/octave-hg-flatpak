@@ -52,10 +52,7 @@ jobs:
       - name: Build
         run: flatpak-builder --user --install-deps-from=flathub --assumeyes --ccache --default-branch=nightly octave org.octave.Octave.yaml
 
-      - name: Copy previous repository from S3 bucket to working directory
-        run: aws s3 sync s3://${{ secrets.AWS_S3_BUCKET }}/repo repo
-
-      - name: Export Octave build to repository
+      - name: Export build to repository
         run: flatpak build-export --gpg-sign=${{ steps.gpg.outputs.keyid }} repo octave nightly
 
       - name: Update repository metadata
