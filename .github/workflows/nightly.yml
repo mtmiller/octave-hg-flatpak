@@ -49,7 +49,7 @@ jobs:
       - name: Pre-download sources from problematic remote sites
         run: |
           mkdir -p downloads
-          curl --output-dir downloads --retry 5 --remote-name $(sed -n 's|^\s*url:\s*\(http.*invisible-mirror.*\)|\1|p' org.octave.Octave.yaml)
+          (cd downloads && curl --retry 5 --remote-name-all $(sed -n 's|^\s*url:\s*\(http.*invisible-mirror.*\)|\1|p' org.octave.Octave.yaml))
           for f in downloads/*.t*; do s=$(sha256sum $f | cut -c1-64); mkdir -p downloads/$s && mv $f downloads/$s/; done
 
       - name: Configure flathub remote
