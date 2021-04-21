@@ -46,17 +46,11 @@ jobs:
       - name: Install dependencies
         run: sudo apt install flatpak flatpak-builder
 
-      - name: Pre-download sources from problematic remote sites
-        run: |
-          mkdir -p downloads
-          (cd downloads && curl --retry 5 --remote-name-all $(sed -n 's|^\s*url:\s*\(http.*invisible-mirror.*\)|\1|p' org.octave.Octave.yaml))
-          for f in downloads/*.t*; do s=$(sha256sum $f | cut -c1-64); mkdir -p downloads/$s && mv $f downloads/$s/; done
-
       - name: Configure flathub remote
         run: flatpak remote-add --user flathub https://flathub.org/repo/flathub.flatpakrepo
 
       - name: Build
-        run: flatpak-builder --user --install-deps-from=flathub --assumeyes --ccache --default-branch=nightly --extra-sources=. octave org.octave.Octave.yaml
+        run: flatpak-builder --user --install-deps-from=flathub --assumeyes --ccache --default-branch=nightly octave org.octave.Octave.yaml
 
       - name: Export build to repository
         run: flatpak build-export --gpg-sign=${{ steps.gpg.outputs.keyid }} repo octave nightly
