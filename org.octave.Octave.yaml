@@ -445,12 +445,8 @@ modules:
       - install.libs
     sources:
       - type: archive
-        url: https://invisible-mirror.net/archives/ncurses/current/ncurses-6.2-20210418.tgz
-        sha256: 7227205e32670a2b7aa3043b04f1233829ace095f59df114443b3c343c16ecb9
-        x-checker-data:
-          type: anitya
-          project-id: 2057
-          url-template: https://invisible-mirror.net/archives/ncurses/current/ncurses-$version.tgz
+        url: https://snapshot.debian.org/archive/debian/20201119T211924Z/pool/main/n/ncurses/ncurses_6.2+20201114.orig.tar.gz
+        sha256: aa3f8cfaff2a2b78f184274ec43d9da910c864e4b4d80fc47b5b48cba9154cd2
 
   - name: octave
     config-opts:
