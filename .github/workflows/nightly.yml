@@ -50,6 +50,9 @@ jobs:
       - name: Configure flathub remote
         run: flatpak remote-add --user flathub https://flathub.org/repo/flathub.flatpakrepo
 
+      - name: Delete any cached octave build results
+        run: rm -rf .flatpak-builder/cache/refs/heads/*/build-octave
+
       - name: Build
         run: flatpak-builder --user --install-deps-from=flathub --assumeyes --default-branch=nightly octave org.octave.Octave.yaml
 
