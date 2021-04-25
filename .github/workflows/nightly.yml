@@ -54,10 +54,7 @@ jobs:
         run: rm -rf .flatpak-builder/cache/refs/heads/*/build-octave
 
       - name: Build
-        run: flatpak-builder --user --install-deps-from=flathub --assumeyes --default-branch=nightly octave org.octave.Octave.yaml
-
-      - name: Export build to repository
-        run: flatpak build-export --gpg-sign=${{ steps.gpg.outputs.keyid }} repo octave nightly
+        run: flatpak-builder --user --install-deps-from=flathub --assumeyes --default-branch=nightly --gpg-sign=${{ steps.gpg.outputs.keyid }} --repo=repo octave org.octave.Octave.yaml
 
       - name: Update repository metadata
         run: flatpak build-update-repo --gpg-sign=${{ steps.gpg.outputs.keyid }} --default-branch=nightly repo
