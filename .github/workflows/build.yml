@@ -53,8 +53,8 @@ jobs:
       - name: Delete any cached octave build results
         run: rm -rf .flatpak-builder/cache/refs/heads/*/build-octave
 
-      - name: Build
-        run: flatpak-builder --user --install --install-deps-from=flathub --assumeyes --default-branch=nightly octave org.octave.Octave.yaml
+      - name: Build and install
+        run: flatpak-builder --user --assumeyes --default-branch=nightly --force-clean --install-deps-from=flathub --install octave org.octave.Octave.yaml
 
       - name: Test running octave --version
         run: flatpak run --branch=nightly org.octave.Octave --version
