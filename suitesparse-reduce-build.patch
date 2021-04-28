@@ -1,5 +1,5 @@
 diff --git a/Makefile b/Makefile
-index 76319551..a8abf476 100644
+index 76319551..0a1d9a5b 100644
 --- a/Makefile
 +++ b/Makefile
 @@ -35,7 +35,7 @@ ifneq ($(GPU_CONFIG),)
@@ -34,9 +34,8 @@ index 76319551..a8abf476 100644
  	( cd SuiteSparse_GPURuntime && $(MAKE) install )
  	( cd GPUQREngine && $(MAKE) install )
  endif
--	( cd SPQR && $(MAKE) install )
+ 	( cd SPQR && $(MAKE) install )
 -	( cd GraphBLAS && $(MAKE) JOBS=$(JOBS) CMAKE_OPTIONS='$(CMAKE_OPTIONS)' install )
-+#	( cd SPQR && $(MAKE) install )
 +#	( cd GraphBLAS && $(MAKE) JOBS=$(JOBS) CMAKE_OPTIONS='$(CMAKE_OPTIONS)' install )
  #	( cd PIRO_BAND && $(MAKE) install )
  #	( cd SKYLINE_SVD && $(MAKE) install )
@@ -78,10 +77,9 @@ index 76319551..a8abf476 100644
  	( cd SuiteSparse_GPURuntime && $(MAKE) library )
  	( cd GPUQREngine && $(MAKE) library )
  endif
--	( cd SPQR && $(MAKE) library )
+ 	( cd SPQR && $(MAKE) library )
 -	( cd GraphBLAS && $(MAKE) JOBS=$(JOBS) CMAKE_OPTIONS='$(CMAKE_OPTIONS)' library )
 -	( cd SLIP_LU && $(MAKE) library )
-+#	( cd SPQR && $(MAKE) library )
 +#	( cd GraphBLAS && $(MAKE) JOBS=$(JOBS) CMAKE_OPTIONS='$(CMAKE_OPTIONS)' library )
 +#	( cd SLIP_LU && $(MAKE) library )
  #	( cd PIRO_BAND && $(MAKE) library )
