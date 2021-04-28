@@ -35,10 +35,9 @@ jobs:
           path: |
             .flatpak-builder
             !.flatpak-builder/build
-            !.flatpak-builder/cache/refs/heads/*/build-octave
             !.flatpak-builder/ccache
             !.flatpak-builder/rofiles
-          key: ${{ runner.os }}-build-${{ env.cache-name }}-${{ hashFiles('org.octave.Octave.yaml') }}
+          key: ${{ runner.os }}-build-${{ env.cache-name }}-${{ hashFiles('*.json', '*.patch', '*.yaml', 'shared-modules/**/*.json') }}
           restore-keys: |
             ${{ runner.os }}-build-${{ env.cache-name }}-
             ${{ runner.os }}-build-
@@ -73,3 +72,6 @@ jobs:
 
       - name: Publish repository to S3 bucket
         run: aws s3 sync repo s3://${{ secrets.AWS_S3_BUCKET }}/repo --acl public-read --delete
+
+      - name: Delete octave build results before saving cache
+        run: rm -rf .flatpak-builder/cache/refs/heads/*/build-octave
