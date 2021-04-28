@@ -65,7 +65,7 @@ jobs:
         run: flatpak run --branch=nightly org.octave.Octave --eval "disp (__octave_config_info__)"
 
       - name: Build and export
-        run: flatpak-builder --user --assumeyes --default-branch=nightly --force-clean --gpg-sign=${{ steps.gpg.outputs.keyid }} --install-deps-from=flathub --repo=repo octave org.octave.Octave.yaml
+        run: flatpak-builder --user --assumeyes --default-branch=nightly --force-clean --install-deps-from=flathub --bundle-sources --gpg-sign=${{ steps.gpg.outputs.keyid }} --repo=repo octave org.octave.Octave.yaml
 
       - name: Update repository metadata
         run: flatpak build-update-repo --gpg-sign=${{ steps.gpg.outputs.keyid }} --default-branch=nightly repo
