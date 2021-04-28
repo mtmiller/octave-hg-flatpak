@@ -35,7 +35,6 @@ jobs:
           path: |
             .flatpak-builder
             !.flatpak-builder/build
-            !.flatpak-builder/cache/refs/heads/*/build-octave
             !.flatpak-builder/ccache
             !.flatpak-builder/rofiles
           key: ${{ runner.os }}-build-${{ env.cache-name }}-${{ hashFiles('org.octave.Octave.yaml') }}
@@ -64,3 +63,6 @@ jobs:
 
       - name: Dump octave build configuration
         run: flatpak run --branch=nightly org.octave.Octave --eval "disp (__octave_config_info__)"
+
+      - name: Delete octave build results before saving cache
+        run: rm -rf .flatpak-builder/cache/refs/heads/*/build-octave
