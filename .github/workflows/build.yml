@@ -37,7 +37,7 @@ jobs:
             !.flatpak-builder/build
             !.flatpak-builder/ccache
             !.flatpak-builder/rofiles
-          key: ${{ runner.os }}-build-${{ env.cache-name }}-${{ hashFiles('org.octave.Octave.yaml') }}
+          key: ${{ runner.os }}-build-${{ env.cache-name }}-${{ hashFiles('*.json', '*.patch', '*.yaml', 'shared-modules/**/*.json') }}
           restore-keys: |
             ${{ runner.os }}-build-${{ env.cache-name }}-
             ${{ runner.os }}-build-
