@@ -30,7 +30,7 @@ jobs:
       - name: Cache flatpak build state directory
         uses: actions/cache@v2
         env:
-          cache-name: cache-flatpak-state
+          cache-name: cache-flatpak-builder
         with:
           path: |
             .flatpak-builder
