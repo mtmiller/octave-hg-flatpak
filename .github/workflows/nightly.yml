@@ -5,7 +5,7 @@ on:
 
 jobs:
   build:
-    name: Build
+    name: Nightly build
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
@@ -37,10 +37,10 @@ jobs:
             !.flatpak-builder/build
             !.flatpak-builder/ccache
             !.flatpak-builder/rofiles
-          key: ${{ runner.os }}-build-${{ env.cache-name }}-${{ hashFiles('*.json', '*.patch', '*.yaml', 'shared-modules/**/*.json') }}
+          key: ${{ runner.os }}-nightly-${{ env.cache-name }}-${{ hashFiles('*.json', '*.patch', '*.yaml', 'shared-modules/**/*.json') }}
           restore-keys: |
-            ${{ runner.os }}-build-${{ env.cache-name }}-
-            ${{ runner.os }}-build-
+            ${{ runner.os }}-nightly-${{ env.cache-name }}-
+            ${{ runner.os }}-nightly-
             ${{ runner.os }}-
 
       - name: Install dependencies
