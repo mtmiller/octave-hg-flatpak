@@ -49,8 +49,13 @@ jobs:
       - name: Configure flathub remote
         run: flatpak remote-add --user flathub https://flathub.org/repo/flathub.flatpakrepo
 
-      - name: Delete any cached octave build results
-        run: rm -rf .flatpak-builder/cache/refs/heads/*/build-octave
+      - name: Delete unwanted leftover build stages from flatpak cache before building
+        run: |
+          ostree refs --repo=.flatpak-builder/cache --delete app runtime
+          ostree refs --repo=.flatpak-builder/cache --delete x86_64-org.octave.Octave.yaml/build-octave
+          ostree refs --repo=.flatpak-builder/cache --delete x86_64-org.octave.Octave.yaml/cleanup
+          ostree refs --repo=.flatpak-builder/cache --delete x86_64-org.octave.Octave.yaml/finish
+          ostree prune --repo=.flatpak-builder/cache --refs-only
 
       - name: Build and install
         run: flatpak-builder --user --assumeyes --default-branch=nightly --force-clean --install-deps-from=flathub --install octave org.octave.Octave.yaml
@@ -64,5 +69,10 @@ jobs:
       - name: Dump octave build configuration
         run: flatpak run --branch=nightly org.octave.Octave --eval "disp (__octave_config_info__)"
 
-      - name: Delete octave build results before saving cache
-        run: rm -rf .flatpak-builder/cache/refs/heads/*/build-octave
+      - name: Delete unwanted final build stages from flatpak cache before saving
+        run: |
+          ostree refs --repo=.flatpak-builder/cache --delete app runtime
+          ostree refs --repo=.flatpak-builder/cache --delete x86_64-org.octave.Octave.yaml/build-octave
+          ostree refs --repo=.flatpak-builder/cache --delete x86_64-org.octave.Octave.yaml/cleanup
+          ostree refs --repo=.flatpak-builder/cache --delete x86_64-org.octave.Octave.yaml/finish
+          ostree prune --repo=.flatpak-builder/cache --refs-only
