@@ -44,7 +44,7 @@ jobs:
             ${{ runner.os }}-
 
       - name: Install dependencies
-        run: sudo apt install flatpak flatpak-builder
+        run: sudo apt update --quiet=2 && sudo apt install flatpak flatpak-builder
 
       - name: Configure flathub remote
         run: flatpak remote-add --user flathub https://flathub.org/repo/flathub.flatpakrepo
