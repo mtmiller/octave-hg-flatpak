@@ -27,35 +27,11 @@ jobs:
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           aws-region: ${{ secrets.AWS_DEFAULT_REGION }}
 
-      - name: Cache flatpak build state directory
-        uses: actions/cache@v2
-        env:
-          cache-name: cache-flatpak-builder
-        with:
-          path: |
-            .flatpak-builder
-            !.flatpak-builder/build
-            !.flatpak-builder/ccache
-            !.flatpak-builder/rofiles
-          key: ${{ runner.os }}-build-${{ env.cache-name }}-${{ hashFiles('*.json', '*.patch', '*.yaml', 'shared-modules/**/*.json') }}
-          restore-keys: |
-            ${{ runner.os }}-build-${{ env.cache-name }}-
-            ${{ runner.os }}-build-
-            ${{ runner.os }}-
-
       - name: Install dependencies
         run: sudo apt update --quiet=2 && sudo apt install flatpak flatpak-builder
 
       - name: Configure flathub remote
         run: flatpak remote-add --user flathub https://flathub.org/repo/flathub.flatpakrepo
-
-      - name: Delete unwanted leftover build stages from flatpak cache before building
-        run: |
-          ostree refs --repo=.flatpak-builder/cache --delete app runtime
-          ostree refs --repo=.flatpak-builder/cache --delete x86_64-org.octave.Octave.yaml/build-octave
-          ostree refs --repo=.flatpak-builder/cache --delete x86_64-org.octave.Octave.yaml/cleanup
-          ostree refs --repo=.flatpak-builder/cache --delete x86_64-org.octave.Octave.yaml/finish
-          ostree prune --repo=.flatpak-builder/cache --refs-only
 
       - name: Build and install
         run: flatpak-builder --user --assumeyes --default-branch=nightly --force-clean --install-deps-from=flathub --install octave org.octave.Octave.yaml
@@ -68,11 +44,3 @@ jobs:
 
       - name: Dump octave build configuration
         run: flatpak run --branch=nightly org.octave.Octave --eval "disp (__octave_config_info__)"
-
-      - name: Delete unwanted final build stages from flatpak cache before saving
-        run: |
-          ostree refs --repo=.flatpak-builder/cache --delete app runtime
-          ostree refs --repo=.flatpak-builder/cache --delete x86_64-org.octave.Octave.yaml/build-octave
-          ostree refs --repo=.flatpak-builder/cache --delete x86_64-org.octave.Octave.yaml/cleanup
-          ostree refs --repo=.flatpak-builder/cache --delete x86_64-org.octave.Octave.yaml/finish
-          ostree prune --repo=.flatpak-builder/cache --refs-only
